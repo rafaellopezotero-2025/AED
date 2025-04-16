@@ -61,6 +61,20 @@ void imprimir(NListaSE* LSE){ //Paso por parámetro el puntero al primer element
 }
 
 
+//Promedio
+double prom (NListaSE* LSE){
+    NListaSE* LSE_aux = LSE; //Creo un puntero auxiliar para poder avanzar entre los nodos
+    double suma = 0;
+    int cont = 0;
+    while (LSE_aux != NULL){ //Mientras que mi puntero sea != NULL estoy recorriendo los nodos, cuando sea NULL es porque ya pasé el último
+        suma += (LSE_aux -> dato); //Imprimo el dato del nodo
+        cont++;
+        LSE_aux = LSE_aux -> link; //Me muevo al siguiente nodo
+    }
+    return suma/cont;
+}
+
+
 int main(){
     NListaSE* lista = NULL;
     int v[] {9,1,3,2,8,7,6};
