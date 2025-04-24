@@ -274,6 +274,85 @@ int add_pos(NListaSE *&LSE, int n, int pos)
     return 1; // Inserción exitosa
 }
 
+
+//Intercambiar dos nodos de la lista
+void intercambiar (NListaSE* &LSE, int n1, int n2){
+    if (n1 == n2 || LSE == NULL) return; //Si el nodo a intercambiar es el mismo o la lista está vacía no hago nada
+
+    // Intercambiar n1 y n2 si n1 es mayor para evitar entrar en un bucle infinito
+    if (n1 > n2) {
+        int aux = n1;
+        n1 = n2;
+        n2 = aux;
+    }
+
+    //Nod1 y Nod2 son los nodos a intercambiar
+    NListaSE* Nod1 = NULL, * Nod2 = NULL;
+    //prev1 es el nodo sgte a Nod1 y prev2 el anterior a Nod2
+    NListaSE* prev1 = NULL, * prev2 = NULL;
+    NListaSE* actual = LSE;
+    int cont = 0;
+
+    while (actual != NULL) //Recorro la lista
+    {
+        if (cont == n1) //Encontré el nodo 1
+        {
+            Nod1 = actual; //Lo guardo
+        }
+        if(cont == n2) //ENcontré el nodo 2
+        {
+            Nod2 = actual; //Lo guardo
+        }
+
+        // Actualizar prev1 hasta encontrar Nod1
+        if (Nod1 == NULL) {
+            prev1 = actual;
+        }
+        // Actualizar prev2 hasta encontrar Nod2
+        if (Nod2 == NULL) {
+            prev2 = actual;
+        }
+
+        actual = actual->link; //Me muevo al siguiente nodo
+        cont++; //Aumento el contador
+    }
+
+    if (Nod1 == NULL || Nod2 == NULL)
+        return; // Si no encontré los nodos no hago nada
+
+
+    // Si los nodos son adyacentes
+    if (Nod1->link == Nod2) { 
+        Nod1->link = Nod2->link; // Conecto Nod1 al siguiente de Nod2
+        Nod2->link = Nod1; // Conecto Nod2 a Nod1
+        if (prev1 != NULL) { 
+            prev1->link = Nod2; // Conecto el nodo anterior a Nod1 con Nod2
+        } else {
+            LSE = Nod2; // Si Nod1 es el primero de la lista, actualizo LSE
+        }
+        return;
+    }
+    
+     // Intercambio los nodos
+     NListaSE* aux = Nod2->link; // GUardo el siguiente de Nod2
+    
+     if (prev1 != NULL) { 
+         prev1->link = Nod2;// Conecto el nodo sgte a Nod1 con Nod2
+     } else {
+         LSE = Nod2; //Si prev1 es null, Nod1 es el primero de la lista
+
+     }
+     Nod2->link = Nod1->link; // Conecto Nod2 al siguiente de Nod1
+ 
+     if (prev2 != NULL) { 
+         prev2->link = Nod1; // Conecto el nodo anterior a Nod2 con Nod1
+     } else {
+         LSE = Nod1; //Si prev2 es null, Nod2 es el primero de la lista
+     }
+     Nod1->link = aux; // Conecto Nod1 al siguiente de Nod2
+    
+}
+
 int main()
 {
     // Inicializar el garbage collector
@@ -333,6 +412,12 @@ int main()
     {
         cerr << msg << endl;
     }
+    cout << endl;
+
+    intercambiar(lista, 1, 5);
+    cout << "Lista después de intercambiar nodos: ";
+    imprimir(lista);
+    cout << endl;
 
     GC_gcollect();
 
